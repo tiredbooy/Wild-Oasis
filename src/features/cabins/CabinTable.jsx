@@ -15,14 +15,16 @@ function CabinTable() {
 
   const filterValue = searchParams.get("discount") || "all";
 
-  let filteredCabiins;
+  let filteredCabins;
 
-  if (filterValue === "all") filteredCabiins = cabins;
+  if (filterValue === "all") filteredCabins = cabins;
+  console.log("filtredCabins:", filteredCabins);
 
   if (filterValue === "no-discount")
-    filteredCabiins?.filter((cabin) => cabin?.discount === 0);
+    filteredCabins = cabins?.filter((cabin) => cabin?.discount == 0);
 
-  if(filterValue === 'with-discount') filteredCabiins?.filter(cabin => cabin?.discount > 0)
+  if (filterValue === "with-discount")
+    filteredCabins = cabins?.filter((cabin) => cabin?.discount > 0);
 
   return (
     <Menus>
@@ -37,7 +39,7 @@ function CabinTable() {
           <div></div>
         </Table.Header>
         <Table.Body
-          data={filteredCabiins}
+          data={filteredCabins}
           render={(cabin) => <CabinRow cabin={cabin} key={cabin.id} />}
         />
       </Table>
