@@ -7,7 +7,11 @@ export async function getBookings({ filter, sortBy }) {
     .select("*, cabins(name), guests(fullName, email)"); // adjust if your table/column names differ
 
   // Filter
-  if(filter !== null) query = query[filter.method || 'eq'](filter.field, filter.value)
+  if(filter) query = query[filter.method || 'eq'](filter.field, filter.value);
+
+  // SORT
+  if(sortBy)
+      query = query.order(sortBy.field, {ascending : sortBy.direction === "asc"})
 
   const { data, error } = await query;
   if (error) {
