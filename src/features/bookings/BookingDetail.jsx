@@ -19,18 +19,14 @@ const HeadingGroup = styled.div`
 `;
 
 function BookingDetail() {
-  const { booking, isLoading } = useBooking();
-  console.log('booking:', booking);
-  const { status, id: bookingId } = booking;
-
-  console.log("booking:", booking);
-  console.log("status:", status);
-
-  // const status = "checked-in";
-
+  const { booking, isLoading, error } = useBooking();
   const moveBack = useMoveBack();
 
   if (isLoading) return <Spinner />;
+  if (error) return <p>Failed to load booking: {error.message}</p>;
+  if (!booking) return <p>No booking found.</p>; // safeguard
+
+  const { status, id: bookingId } = booking;
 
   const statusToTagName = {
     unconfirmed: "blue",
@@ -58,5 +54,6 @@ function BookingDetail() {
     </>
   );
 }
+
 
 export default BookingDetail;
