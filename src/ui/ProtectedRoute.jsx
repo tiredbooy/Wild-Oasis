@@ -18,6 +18,7 @@ function ProtectedRoute({ children }) {
   // 1. Load the Authenticated user
 
   const { isAuthenticated, isLoading } = useUser();
+  console.log('isAuthenicated:', isAuthenticated);
 
   // 2. If there is no authenicated user, redirect to the /login
   useEffect(
