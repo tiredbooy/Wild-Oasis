@@ -3,15 +3,22 @@ import Button from "../../ui/Button";
 import Form from "../../ui/Form";
 import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
+import { useSignup } from "./useSignup";
 
 // Email regex: /\S+@\S+\.\S+/
 
 function SignupForm() {
-  const { register, formState, getValues , handleSubmit } = useForm();
+  const { signup, isLoading } = useSignup();
+  const { register, formState, getValues, handleSubmit, reset } = useForm();
   const { errors } = formState;
 
-  function onSubmit(data) {
-    console.log('data:', data);
+  function onSubmit({ fullName, email, password }) {
+    signup(
+      { fullName, email, password },
+      {
+        onSettled: () => reset(),
+      }
+    );
   }
 
   return (
@@ -20,6 +27,7 @@ function SignupForm() {
         <Input
           type="text"
           id="fullName"
+          diabled={isLoading}
           {...register("fullName", { required: "This Field is Required" })}
         />
       </FormRow>
@@ -28,6 +36,7 @@ function SignupForm() {
         <Input
           type="email"
           id="email"
+          diabled={isLoading}
           {...register("email", {
             required: "This Field is Required",
             pattern: {
@@ -38,10 +47,14 @@ function SignupForm() {
         />
       </FormRow>
 
-      <FormRow label="Password (min 8 characters)" error={errors?.password?.message}>
+      <FormRow
+        label="Password (min 8 characters)"
+        error={errors?.password?.message}
+      >
         <Input
           type="password"
           id="password"
+          diabled={isLoading}
           {...register("password", {
             required: "This Field is Required",
             minLength: {
@@ -56,6 +69,7 @@ function SignupForm() {
         <Input
           type="password"
           id="passwordConfirm"
+          diabled={isLoading}
           {...register("passwordConfirm", {
             required: "This Field is Required",
             validate: (value) =>
@@ -69,7 +83,7 @@ function SignupForm() {
         <Button variation="secondary" type="reset">
           Cancel
         </Button>
-        <Button>Create new user</Button>
+        <Button diabled={isLoading}>Create new user</Button>
       </FormRow>
     </Form>
   );
